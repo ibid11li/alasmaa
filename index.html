@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سمِّ - أسماء عربية</title>
+
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f7f8fa;
+            padding: 40px 16px;
+        }
+
+        main {
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        input, select, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            margin-top: 25px;
+            background: #176b50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        #results {
+            margin-top: 25px;
+            line-height: 2;
+            white-space: pre-line;
+
+
+#results {
+    margin-top: 25px;
+}
+
+.names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.name-card {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.name-card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.name-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.8;
+}
+
+}
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>سمِّ</h1>
+        <p>اكتشف الاسم المناسب لطفلك</p>
+
+        <form id="search-form">
+
+            <label for="gender">الجنس</label>
+            <select id="gender">
+                <option value="">الكل</option>
+                <option value="male">ولد</option>
+                <option value="female">بنت</option>
+            </select>
+
+            <label for="letters">عدد الحروف</label>
+            <input id="letters" type="number"
+                   min="1" step="1" placeholder="اختياري">
+
+            <label for="search_letter">يحتوي على حرف</label>
+            <input id="search_letter" type="text"
+                   maxlength="1" placeholder="مثال: ر">
+
+            <button type="submit">بحث</button>
+
+        </form>
+        
+        <div id="results"></div>
+   
+    </main>
+
+    <script>
+        
+    const form = document.getElementById("search-form");
+    const resultsBox = document.getElementById("results");
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const gender = document.getElementById("gender").value;
+        const letters = document.getElementById("letters").value;
+        const letter = document.getElementById("search_letter").value.trim();
+
+        const params = new URLSearchParams();
+
+        if (gender) params.set("gender", gender);
+        if (letters) params.set("letters", letters);
+        if (letter) params.set("search_letter", letter);
+
+        const query = params.toString();
+        const url = "/names" + (query ? "?" + query : "");
+
+        resultsBox.textContent = "جاري البحث...";
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                resultsBox.textContent = "حدث خطأ في البحث";
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.count === 0) {
+                resultsBox.textContent = "لا توجد أسماء مطابقة";
+                return;
+            }
+
+            
+resultsBox.replaceChildren();
+
+// إنشاء عنوان النتائج
+const title = document.createElement("h2");
+title.textContent = "نتائج البحث: " + data.count;
+resultsBox.appendChild(title);
+
+// إنشاء حاوية البطاقات
+const grid = document.createElement("div");
+grid.className = "names-grid";
+
+// إنشاء بطاقة لكل اسم
+data.names.forEach(function(item) {
+
+    const card = document.createElement("div");
+    card.className = "name-card";
+
+    const name = document.createElement("h3");
+    name.textContent = item.name;
+
+    const meaning = document.createElement("p");
+    meaning.textContent = item.meaning ?? "لا يوجد معنى";
+
+    card.appendChild(name);
+    card.appendChild(meaning);
+
+    grid.appendChild(card);
+});
+
+// إضافة البطاقات إلى الصفحة
+resultsBox.appendChild(grid);
+
+
+        } catch (error) {
+            resultsBox.textContent = "تعذر الاتصال بالخادم";
+    }
+});
+
+    </script>
+</body>
+</html>
