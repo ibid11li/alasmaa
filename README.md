@@ -23,7 +23,9 @@ The project makes it easy to browse a database of over 1,000 Arabic names using 
 
 ## How It Works
 
-The web interface sends selected filters to the FastAPI `/names` endpoint. The backend builds a parameterized SQL query using the provided filters, queries the MySQL database, and returns matching names for display.
+The application sends user-selected filters to a FastAPI backend hosted on Render. The backend executes parameterized SQL queries against a TiDB Cloud database and returns matching Arabic names and their meanings.
+
+The database was initially developed locally using MySQL before being deployed to TiDB Cloud..
 
 ## Live Demo
 
