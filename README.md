@@ -12,12 +12,14 @@ The project makes it easy to browse a database of over 1,000 Arabic names using 
 - Combine filters or browse without applying any.
 - View names alongside their meanings.
 
-## Tech Stack
+### Technologies
 
-- **Python** — backend logic
-- **FastAPI** — REST API
-- **MySQL** — relational database and SQL queries
-- **HTML, CSS, JavaScript** — web interface
+- **Python** – Backend development
+- **FastAPI** – REST API
+- **MySQL** – Local database development
+- **TiDB Cloud** – Cloud database (MySQL-compatible)
+- **Render** – Backend hosting and deployment
+- **HTML, CSS & JavaScript** – Web interface
 
 ## How It Works
 
